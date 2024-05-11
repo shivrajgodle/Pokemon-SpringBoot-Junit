@@ -59,7 +59,55 @@ public class PokemonRepositoryTests {
     }
 
 
+    @Test
+    public void PokemonRepository_findByType_ReturnPokemonNotNull (){
+
+        //Arrange
+        Pokemon pokemon = Pokemon.builder()
+                .name("pikachu")
+                .type("electric").build();
+
+        //Act
+        pokemonRepository.save(pokemon);
+
+     Pokemon pokemonList =  pokemonRepository.findByType(pokemon.getType()).get();
+
+        //Assert
+        Assertions.assertThat(pokemonList).isNotNull();
+    }
 
 
+    @Test
+    public void PokemonRepository_UpdatePokemon_ReturnPokemonNotNull(){
+        Pokemon pokemon = Pokemon.builder().name("pikachu").type("electric").build();
 
+        pokemonRepository.save(pokemon);
+
+        Pokemon pokemonSave = pokemonRepository.findById(pokemon.getId()).get();
+        pokemonSave.setType("Electric");
+        pokemonSave.setName("pikachu11");
+
+        Pokemon updatedPokemon = pokemonRepository.save(pokemonSave);
+
+        Assertions.assertThat(updatedPokemon.getName()).isNotNull();
+        Assertions.assertThat(updatedPokemon.getType()).isNotNull();
+    }
+
+    @Test
+    public void PokemonRepository_pokemonDelete_ReturnPokemonIsEmpty(){
+
+        //Arrange
+        Pokemon pokemon = Pokemon.builder()
+                .name("pikachu")
+                .type("electric").build();
+
+        //Act
+        pokemonRepository.save(pokemon);
+
+        pokemonRepository.deleteById(pokemon.getId());
+        Optional<Pokemon> pokemonReturn = pokemonRepository.findById(pokemon.getId());
+
+        //Assert
+        Assertions.assertThat(pokemonReturn).isEmpty();
+    }
 }
